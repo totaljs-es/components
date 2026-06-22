@@ -524,6 +524,7 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 			// opt.wrap = true;
 			// opt.linetag = 'p';
 			// opt.ul = true;
+			// opt.ol = true;
 			// opt.code = true;
 			// opt.images = true;
 			// opt.links = true;
@@ -967,7 +968,7 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 
 				var tmpline = line.trim();
 
-				if (opt.ul !== false && ordered.test(tmpline)) {
+				if ((opt.ul !== false || opt.ol !== false) && ordered.test(tmpline)) {
 
 					var size = line.match(orderedsize);
 					if (size)
@@ -978,19 +979,20 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 					var c = tmpline.charAt(0);
 					var ultype = c === '-' || c === '+' || c === '*' ? 'ul' : 'ol';
 					var tmpstr = (ultype === 'ol' ? tmpline.substring(tmpline.indexOf('.') + 1) : tmpline.substring(2));
-					var istask = false;
+					var closeforce = (ultype === 'ol' && opt.ol === false) || (ultype === 'ul' && opt.ul === false);
 
-					var tt = tmpstr.trim().substring(0, 3);
-					istask = tt === '[ ]' || tt === '[x]';
+					if (!closeforce) {
+						var tt = tmpstr.trim().substring(0, 3);
+						var istask = tt === '[ ]' || tt === '[x]';
+						var tmpval = tmpstr.trim();
+						if (opt.html)
+							tmpval = opt.html(tmpval, 'li');
+						builder.push('\0' + (ultype === 'ol' ? ('o' + ((/\d+\./).test(tmpline) ? '1' : 'a')) : 'ul') + size + '<li data-line="{0}" class="markdown-line{1}">'.format(i, istask ? ' markdown-task' : '') + tmpval.replace(/\[x\]/g, '<i class="ti ti-check-square green"></i>').replace(/\[\s\]/g, '<i class="ti ti-square"></i>') + '</li>');
+					}
 
-					var tmpval = tmpstr.trim();
+				}
 
-					if (opt.html)
-						tmpval = opt.html(tmpval, 'li');
-
-					builder.push('\0' + (ultype === 'ol' ? ('o' + ((/\d+\./).test(tmpline) ? '1' : 'a')) : 'ul') + size + '<li data-line="{0}" class="markdown-line{1}">'.format(i, istask ? ' markdown-task' : '') + tmpval.replace(/\[x\]/g, '<i class="ti ti-check-square green"></i>').replace(/\[\s\]/g, '<i class="ti ti-square"></i>') + '</li>');
-
-				} else {
+				if (closeforce) {
 					closeul();
 					if (line) {
 						line = line.trim();
@@ -1014,7 +1016,6 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 		};
 
 	})();
-
 
 	customElements.define('ui-markdown', class extends HTMLElement {
 

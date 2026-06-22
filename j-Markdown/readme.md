@@ -21,7 +21,7 @@ console.log(text.markdown(opt));
 
 - `opt.wrap = true` wraps the output with `<div class="markdown">YOUR_MARKDOWN</div>`
 - `opt.linetag = 'p'` a default new line tag
-- `opt.ul = true` enables unordered/ordered lists
+- `opt.ul = true` enables unordered lists
 - `opt.code = true` enables custom codes
 - `opt.images = true` enables images
 - `opt.links = true` enables links
@@ -41,8 +41,9 @@ console.log(text.markdown(opt));
 - `opt.keywords = true` parses keywords in the form `{keyword}(type)`
 - `opt.noredraw = true` skips redrawing of code/video/section/block parts (default: `false`)
 - `opt.element {jQuery}` HTML element that will be used as a default element in `FUNC.markdownredraw()`
-- __NEW__: `opt.bookmarks {Boolean}` enables/disables creating headline bookmarks `id=""` (default: `true`)
-- __NEW__: `opt.prefix {String}` a prefix for bookmarks (default: `empty`)
+- `opt.bookmarks {Boolean}` enables/disables creating headline bookmarks `id=""` (default: `true`)
+- `opt.prefix {String}` a prefix for bookmarks (default: `empty`)
+- __NEW__: `opt.ol = true` enables ordered lists
 
 __Good to know__:
 
@@ -55,7 +56,7 @@ __Good to know__:
 - class `markdown-small` can decrease font sizes
 - event `ON('markdown', function(el, opt) {})` is executed if the markdown is pre-rendered (`el {jQuery}` is `<body` element in most cases)
 - components registers `Thelpers.markdown([opt])` helper
-- __NEW__: every rendered line contain `markdown-line` class and `data-line="line_number"` attribute
+- every rendered line contain `markdown-line` class and `data-line="line_number"` attribute
 
 __Toggleable section:__
 
