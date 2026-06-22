@@ -938,35 +938,30 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 				}
 
 				// footnotes
-				if ((/^#\d+:(\s)+/).test(line)) {
-					if (opt.footnotes !== false) {
-						tmp = line.indexOf(':');
-						builder.push('<div class="markdown-footnotebody" data-id="{0}"><span>{0}:</span> {1}</div>'.format(line.substring(1, tmp).trim(), line.substring(tmp + 1).trim()));
-					}
+				if ((/^#\d+:(\s)+/).test(line) && opt.footnotes !== false) {
+					tmp = line.indexOf(':');
+					builder.push('<div class="markdown-footnotebody" data-id="{0}"><span>{0}:</span> {1}</div>'.format(line.substring(1, tmp).trim(), line.substring(tmp + 1).trim()));
 					continue;
 				}
 
-				if (line.substring(0, 5) === '&gt; ') {
-					if (opt.blockquotes !== false) {
-						line = line.substring(5).trim();
-						if (opt.html)
-							line = opt.html(line, 'blockquote');
-						builder.push('<blockquote class="markdown-line" data-line="' + i + '">' + line + '</blockquote>');
-					}
+				if (line.substring(0, 5) === '&gt; ' && opt.blockquotes !== false) {
+					line = line.substring(5).trim();
+					if (opt.html)
+						line = opt.html(line, 'blockquote');
+					builder.push('<blockquote class="markdown-line" data-line="' + i + '">' + line + '</blockquote>');
 					continue;
 				}
 
-				if (line.substring(0, 5) === '&lt; ') {
-					if (opt.sections !== false) {
-						line = line.substring(5).trim();
-						if (opt.html)
-							line = opt.html(line, 'section');
-						builder.push('<section class="markdown-line" data-line="' + i + '">' + line + '</section>');
-					}
+				if (line.substring(0, 5) === '&lt; ' && opt.sections !== false) {
+					line = line.substring(5).trim();
+					if (opt.html)
+						line = opt.html(line, 'section');
+					builder.push('<section class="markdown-line" data-line="' + i + '">' + line + '</section>');
 					continue;
 				}
 
 				var tmpline = line.trim();
+				var closeforce = true;
 
 				if ((opt.ul !== false || opt.ol !== false) && ordered.test(tmpline)) {
 
@@ -979,7 +974,7 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 					var c = tmpline.charAt(0);
 					var ultype = c === '-' || c === '+' || c === '*' ? 'ul' : 'ol';
 					var tmpstr = (ultype === 'ol' ? tmpline.substring(tmpline.indexOf('.') + 1) : tmpline.substring(2));
-					var closeforce = (ultype === 'ol' && opt.ol === false) || (ultype === 'ul' && opt.ul === false);
+					closeforce = (ultype === 'ol' && opt.ol === false) || (ultype === 'ul' && opt.ul === false);
 
 					if (!closeforce) {
 						var tt = tmpstr.trim().substring(0, 3);
@@ -989,7 +984,6 @@ COMPONENT('markdown', 'highlight:true;charts:false', function (self, config) {
 							tmpval = opt.html(tmpval, 'li');
 						builder.push('\0' + (ultype === 'ol' ? ('o' + ((/\d+\./).test(tmpline) ? '1' : 'a')) : 'ul') + size + '<li data-line="{0}" class="markdown-line{1}">'.format(i, istask ? ' markdown-task' : '') + tmpval.replace(/\[x\]/g, '<i class="ti ti-check-square green"></i>').replace(/\[\s\]/g, '<i class="ti ti-square"></i>') + '</li>');
 					}
-
 				}
 
 				if (closeforce) {
