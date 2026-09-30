@@ -24,7 +24,7 @@ __Data-source__ needs to contain:
 			dirsource: [{ id: 'String|Number|Boolean', name: '...' }] // optional: a dropdown filter (it needs "directory" component)
 		}
 	],
-    items: [{ name: 'Row <b>1</b> will be bold', $style: 'NEW: css for the row' }, { name: 'Row 2' }, ...] // items
+    items: [{ name: 'Row <b>1</b> will be bold', $class: 'NEW: css class for the row', $style: 'NEW: css for the row' }, { name: 'Row 2' }, ...] // items
     page: 1,    // current pages
     pages: 30,  // count of pages
     limit: 5,   // items limit per page

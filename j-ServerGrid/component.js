@@ -381,7 +381,7 @@ COMPONENT('servergrid', 'colwidth:150;pluralizepages:# pages,# page,# pages,# pa
 		for (let i = 0; i < value.items.length; i++) {
 
 			let row = value.items[i];
-			let html = '<div class="{0}-row {0}-row_{1}{3}" data-index="{2}"{4}>'.format(cls, self.ID, i, row.$selected ? ' selected' : '', row.$style ? ' style="{0}"'.format(row.$style) : '');
+			let html = '<div class="{0}-row {0}-row_{1}{3}{5}" data-index="{2}"{4}>'.format(cls, self.ID, i, row.$selected ? ' selected' : '', row.$style ? ' style="{0}"'.format(row.$style) : '', row.$class ? (' ' + row.$class) : '');
 
 			html += ('<div class="{0}-td {0}-number">' + (config.checkbox ? '<em><i class="ti ti-check"></i></em>' : '') + '<span>{1}</span></div>').format(cls, i + 1);
 
